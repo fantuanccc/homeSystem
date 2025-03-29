@@ -1,4 +1,4 @@
-package com.hua.furnitureManagement.domin;
+package com.hua.furnitureManagement.domain;
 
 import lombok.Data;
 

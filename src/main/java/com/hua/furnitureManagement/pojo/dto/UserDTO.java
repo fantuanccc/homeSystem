@@ -1,4 +1,4 @@
-package com.hua.furnitureManagement.dto;
+package com.hua.furnitureManagement.pojo.dto;
 
 import lombok.Data;
 

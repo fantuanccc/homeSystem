@@ -30,6 +30,9 @@ public class Response {
         return new Result<T>().setCode(ResultsCode.FAIL).setMsg(FAILED).setData(data);
     }
 
+    public static <T> Result<T> error(String data) {
+        return new Result<T>().setCode(ResultsCode.FAIL).setMsg(FAILED).setData((T) data);
+    }
 
     public static Result success() {
         return new Result().setCode(ResultsCode.SUCCESS).setMsg(SUCCESS);

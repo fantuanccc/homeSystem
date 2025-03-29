@@ -1,6 +1,7 @@
 package com.hua.furnitureManagement.service;
 
-import com.hua.furnitureManagement.dto.UserDTO;
+import com.hua.furnitureManagement.pojo.dto.UserDTO;
+import com.hua.furnitureManagement.pojo.vo.UserVO;
 
 /**
  * @ClassName UserService
@@ -11,7 +12,7 @@ public interface UserService {
     /**
      * 登录
      */
-    public void login(UserDTO user);
+    public UserVO login(UserDTO user);
 
     /**
      * 注册

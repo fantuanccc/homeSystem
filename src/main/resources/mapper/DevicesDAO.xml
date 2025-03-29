@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hua.furnitureManagement.dao.DevicesDAO">
+
+    <insert id="insert" parameterType="com.hua.furnitureManagement.domain.DeviceDO">
+        INSERT INTO `devices` (
+            `gmt_create`,
+            `gmt_modified`,
+            `name`,
+            `type`,
+            `status`,
+            `location`,
+            `address_id`,
+            `energy_consumed`,
+            `devices_strategy_id`,
+            `mode`,
+            `brightness`,
+            `temperature`,
+            `fan_speed`,
+            `volume`,
+            `water_level`,
+            `color_temperature`,
+            `remaining_time`,
+            `color`
+        ) VALUES (
+                     now(),
+                     now(),
+                     #{name},
+                     #{type},
+                     #{status},
+                     #{location},
+                     #{addressId},
+                     #{energyConsumed},
+                     #{devicesStrategyId},
+                     #{mode},
+                     #{brightness},
+                     #{temperature},
+                     #{fanSpeed},
+                     #{volume},
+                     #{waterLevel},
+                     #{colorTemperature},
+                     #{remainingTime},
+                     #{color}
+                 );
+    </insert>
+
+    <update id="update" parameterType="com.hua.furnitureManagement.domain.DeviceDO">
+        UPDATE `devices`
+        <set>
+            `gmt_modified` = now(),
+            <if test="name != null">`name` = #{name},</if>
+            <if test="type != null">`type` = #{type},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="location != null">`location` = #{location},</if>
+            <if test="addressId != null">`address_id` = #{addressId},</if>
+            <if test="energyConsumed != null">`energy_consumed` = #{energyConsumed},</if>
+            <if test="devicesStrategyId != null">`devices_strategy_id` = #{devicesStrategyId},</if>
+            <if test="mode != null">`mode` = #{mode},</if>
+            <if test="brightness != null">`brightness` = #{brightness},</if>
+            <if test="temperature != null">`temperature` = #{temperature},</if>
+            <if test="fanSpeed != null">`fan_speed` = #{fanSpeed},</if>
+            <if test="volume != null">`volume` = #{volume},</if>
+            <if test="waterLevel != null">`water_level` = #{waterLevel},</if>
+            <if test="colorTemperature != null">`color_temperature` = #{colorTemperature},</if>
+            <if test="remainingTime != null">`remaining_time` = #{remainingTime},</if>
+            <if test="color != null">`color` = #{color},</if>
+        </set>
+        WHERE `id` = #{id};
+    </update>
+
+    <delete id="delete">
+        delete from devices where address_id = #{addressId} and id = #{deviceId}
+    </delete>
+
+    <select id="countByAddressId" resultType="java.lang.Integer">
+        select count(*) from devices where address_id = #{addressId}
+    </select>
+
+    <select id="listByAddressId" resultType="com.hua.furnitureManagement.domain.DeviceDO">
+        select * from devices where address_id = #{addressId}
+        limit #{pageNum} , #{pageSize}
+    </select>
+
+    <select id="pieChart" resultType="java.util.Map">
+        select count(type) as value, type from devices where address_id = #{addressId}
+        group by type
+    </select>
+
+</mapper>

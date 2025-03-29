@@ -1,13 +1,13 @@
 package com.hua.furnitureManagement.service.impl;
 
 import com.hua.furnitureManagement.dao.UserDAO;
-import com.hua.furnitureManagement.domin.UserDO;
-import com.hua.furnitureManagement.dto.UserDTO;
+import com.hua.furnitureManagement.domain.UserDO;
+import com.hua.furnitureManagement.pojo.dto.UserDTO;
 import com.hua.furnitureManagement.service.UserService;
+import com.hua.furnitureManagement.pojo.vo.UserVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import static org.assertj.core.util.DateUtil.now;
 
 /**
  * 用戶服务实现类
@@ -21,16 +21,19 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     @Override
-    public void login(UserDTO userDTO) {
-       UserDO userDO = new UserDO();
-       userDO.setName(userDTO.getName());
-       UserDO user = userDAO.login(userDO);
-       if (user == null) {
-           throw new RuntimeException("用户名不存在");
-       }
-       if (!user.getPassword().equals(userDTO.getPassword())) {
-           throw new RuntimeException("密码错误");
-       }
+    public UserVO login(UserDTO userDTO) {
+        UserVO userVO = new UserVO();
+        UserDO userDO = new UserDO();
+        userDO.setName(userDTO.getName());
+        UserDO user = userDAO.login(userDO);
+        if (user == null) {
+            throw new RuntimeException("用户名不存在");
+        }
+        if (!user.getPassword().equals(userDTO.getPassword())) {
+            throw new RuntimeException("密码错误");
+        }
+        BeanUtils.copyProperties(user, userVO);
+        return userVO;
     }
 
     @Override

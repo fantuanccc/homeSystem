@@ -2,8 +2,9 @@ package com.hua.furnitureManagement.controller;
 
 import com.hua.furnitureManagement.common.result.Response;
 import com.hua.furnitureManagement.common.result.Result;
-import com.hua.furnitureManagement.dto.UserDTO;
+import com.hua.furnitureManagement.pojo.dto.UserDTO;
 import com.hua.furnitureManagement.service.UserService;
+import com.hua.furnitureManagement.pojo.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +18,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public Result<String> login(@RequestBody UserDTO user) {
+    public Result<UserVO> login(@RequestBody UserDTO user) {
         try {
-            userService.login(user);
-            return Response.success("登录成功");
+            return Response.success(userService.login(user));
         } catch (Exception e) {
             log.error("登录失败, {}",e.getMessage(), e);
             return Response.error(e.getMessage());

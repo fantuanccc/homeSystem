@@ -2,16 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hua.furnitureManagement.dao.UserDAO">
 
-<insert id="register" useGeneratedKeys="true" keyProperty="id" parameterType="com.hua.furnitureManagement.domin.UserDO">
-    insert into user (gmt_create, gmt_modified, name, password, is_admin, is_deleted, address_id, phone_number)
-    values (now(), now(), #{name}, #{password}, #{isAdmin}, 0, #{addressId}, #{phoneNumber})
-</insert>
+    <insert id="register" useGeneratedKeys="true" keyProperty="id" parameterType="com.hua.furnitureManagement.domain.UserDO">
+        insert into user (gmt_create, gmt_modified, name, password, is_admin, is_deleted, address_id, phone_number)
+        values (now(), now(), #{name}, #{password}, #{isAdmin}, 0, #{addressId}, #{phoneNumber})
+    </insert>
 
-<select id="login" resultType="com.hua.furnitureManagement.domin.UserDO">
-        select * from user where is_deleted = 0
-        <if test="name!= null and name!= ''">
-            and name = #{name}
-        </if>
-</select>
+    <select id="login" resultType="com.hua.furnitureManagement.domain.UserDO">
+            select * from user where is_deleted = 0
+            <if test="name!= null and name!= ''">
+                and name = #{name}
+            </if>
+    </select>
+
+    <select id="selectAddressByID" resultType="java.lang.Long">
+        select address_id from user where id = #{id}
+    </select>
 
 </mapper>
