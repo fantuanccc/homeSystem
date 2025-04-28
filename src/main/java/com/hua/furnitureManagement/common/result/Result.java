@@ -1,76 +1,38 @@
 package com.hua.furnitureManagement.common.result;
 
+import lombok.Data;
+
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * 接口返回结果封装
- *
+ * 后端统一返回结果
  * @param <T>
- * @Author 曲冠华
- * @Date 2025/2/17
  */
+@Data
 public class Result<T> implements Serializable {
-    private static final long serialVersionUID = 1L;
 
-    public int code;
+    private Integer code; //编码：1成功，0和其它数字为失败
+    private String msg; //错误信息
+    private T data; //数据
 
-    private String msg;
-
-    private T data;
-
-    private final Map<String, Object> mapdata = new HashMap<String, Object>();
-
-    public void Result() {
-        this.code = ResultsCode.SUCCESS.code;
-        this.msg = ResultsCode.SUCCESS.message;
+    public static <T> Result<T> success() {
+        Result<T> result = new Result<T>();
+        result.code = 1;
+        return result;
     }
 
-    public Result<T> setCode(ResultsCode resultsCode) {
-        this.code = resultsCode.code;
-        return this;
+    public static <T> Result<T> success(T object) {
+        Result<T> result = new Result<T>();
+        result.data = object;
+        result.code = 1;
+        return result;
     }
 
-    public int getCode() {
-        return code;
+    public static <T> Result<T> error(String msg) {
+        Result result = new Result();
+        result.msg = msg;
+        result.code = 0;
+        return result;
     }
 
-    public Result<T> setCode(int code) {
-        this.code = code;
-        return this;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public Result<T> setMsg(String msg) {
-        this.msg = msg;
-        return this;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public Result<T> setData(T data) {
-        this.data = data;
-        return this;
-    }
-
-    public Result<T> putDataValue(String key, Object value) {
-        mapdata.put(key, value);
-        this.data = (T) mapdata;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "code=" + code +
-                ", msg='" + msg + '\'' +
-                ", data=" + data +
-                '}';
-    }
 }

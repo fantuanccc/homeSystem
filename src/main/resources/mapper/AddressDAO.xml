@@ -2,5 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hua.furnitureManagement.dao.AddressDAO">
 
+    <select id="selectByPhone" resultType="java.lang.Boolean">
+        select exists(select 1 from address where phone_number = #{phoneNumber}
+                                            and id = #{addressId})
+    </select>
 
+    <select id="getAddressInfo" resultType="com.hua.furnitureManagement.pojo.entry.AddressDO">
+        select * from address where id = #{addressId}
+    </select>
+
+    <select id="isUsingStrategy" resultType="java.lang.Integer">
+        select count(id) from address where strategy_id = #{strategyId}
+    </select>
 </mapper>

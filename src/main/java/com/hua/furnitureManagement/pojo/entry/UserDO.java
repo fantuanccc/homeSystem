@@ -1,4 +1,4 @@
-package com.hua.furnitureManagement.domain;
+package com.hua.furnitureManagement.pojo.entry;
 
 import lombok.Data;
 
@@ -9,9 +9,9 @@ public class UserDO {
     private Long id;
     private Date gmtCreate;
     private Date gmtModified;
-    private String name;
+    private String username;
     private String password;
-    private Integer isAdmin;
+    private Integer isOwner;
     private Integer isDeleted;
     private Long addressId;
     private String phoneNumber;

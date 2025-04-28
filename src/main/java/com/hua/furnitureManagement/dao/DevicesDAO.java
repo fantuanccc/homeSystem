@@ -1,6 +1,6 @@
 package com.hua.furnitureManagement.dao;
 
-import com.hua.furnitureManagement.domain.DeviceDO;
+import com.hua.furnitureManagement.pojo.entry.DeviceDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -22,8 +22,17 @@ public interface DevicesDAO {
     int update(DeviceDO deviceDO);
 
     // 删除设备信息
-    int delete(Long deviceId, Long addressId);
+    int delete(Long deviceId);
 
     // 设备数据饼图
     List<Map<String, Object>> pieChart(Long addressId);
+
+    // 根据设备ID查询设备信息
+    DeviceDO selectById(Long id);
+
+    // 获取设备策略是否被使用
+    int isUsingDeviceStrategy(Long deviceStrategyId);
+
+    // 获取开启状态的设备列表
+    List<DeviceDO> deviceStartList();
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hua.furnitureManagement.dao.DevicesDAO">
 
-    <insert id="insert" parameterType="com.hua.furnitureManagement.domain.DeviceDO">
+    <insert id="insert" parameterType="com.hua.furnitureManagement.pojo.entry.DeviceDO">
         INSERT INTO `devices` (
             `gmt_create`,
             `gmt_modified`,
@@ -11,7 +11,7 @@
             `status`,
             `location`,
             `address_id`,
-            `energy_consumed`,
+            `power`,
             `devices_strategy_id`,
             `mode`,
             `brightness`,
@@ -30,7 +30,7 @@
                      #{status},
                      #{location},
                      #{addressId},
-                     #{energyConsumed},
+                     #{power},
                      #{devicesStrategyId},
                      #{mode},
                      #{brightness},
@@ -44,46 +44,91 @@
                  );
     </insert>
 
-    <update id="update" parameterType="com.hua.furnitureManagement.domain.DeviceDO">
+    <update id="update" parameterType="com.hua.furnitureManagement.pojo.entry.DeviceDO">
         UPDATE `devices`
         <set>
             `gmt_modified` = now(),
-            <if test="name != null">`name` = #{name},</if>
-            <if test="type != null">`type` = #{type},</if>
-            <if test="status != null">`status` = #{status},</if>
-            <if test="location != null">`location` = #{location},</if>
-            <if test="addressId != null">`address_id` = #{addressId},</if>
-            <if test="energyConsumed != null">`energy_consumed` = #{energyConsumed},</if>
-            <if test="devicesStrategyId != null">`devices_strategy_id` = #{devicesStrategyId},</if>
-            <if test="mode != null">`mode` = #{mode},</if>
-            <if test="brightness != null">`brightness` = #{brightness},</if>
-            <if test="temperature != null">`temperature` = #{temperature},</if>
-            <if test="fanSpeed != null">`fan_speed` = #{fanSpeed},</if>
-            <if test="volume != null">`volume` = #{volume},</if>
-            <if test="waterLevel != null">`water_level` = #{waterLevel},</if>
-            <if test="colorTemperature != null">`color_temperature` = #{colorTemperature},</if>
-            <if test="remainingTime != null">`remaining_time` = #{remainingTime},</if>
-            <if test="color != null">`color` = #{color},</if>
+            <if test="name != null and name != ''">
+                `name` = #{name},
+            </if>
+            <if test="type != null">
+                `type` = #{type},
+            </if>
+            <if test="status != null">
+                `status` = #{status},
+            </if>
+            <if test="location != null and location != ''">
+                `location` = #{location},
+            </if>
+            <if test="addressId != null">
+                `address_id` = #{addressId},
+            </if>
+            <if test="power != null and power != ''">
+                `power` = #{power},
+            </if>
+            <if test="devicesStrategyId != null">
+                `devices_strategy_id` = #{devicesStrategyId},
+            </if>
+            <if test="mode != null and mode != ''">
+                `mode` = #{mode},
+            </if>
+            <if test="brightness != null">
+                `brightness` = #{brightness},
+            </if>
+            <if test="temperature != null">
+                `temperature` = #{temperature},
+            </if>
+            <if test="fanSpeed != null">
+                `fan_speed` = #{fanSpeed},
+            </if>
+            <if test="volume != null">
+                `volume` = #{volume},
+            </if>
+            <if test="waterLevel != null">
+                `water_level` = #{waterLevel},
+            </if>
+            <if test="colorTemperature != null">
+                `color_temperature` = #{colorTemperature},
+            </if>
+            <if test="remainingTime != null">
+                `remaining_time` = #{remainingTime},
+            </if>
+            <if test="color != null">
+                `color` = #{color},
+            </if>
         </set>
-        WHERE `id` = #{id};
+        WHERE `id` = #{id}
     </update>
 
     <delete id="delete">
-        delete from devices where address_id = #{addressId} and id = #{deviceId}
+        delete from devices where id = #{deviceId}
     </delete>
 
     <select id="countByAddressId" resultType="java.lang.Integer">
         select count(*) from devices where address_id = #{addressId}
     </select>
 
-    <select id="listByAddressId" resultType="com.hua.furnitureManagement.domain.DeviceDO">
+    <select id="listByAddressId" resultType="com.hua.furnitureManagement.pojo.entry.DeviceDO">
         select * from devices where address_id = #{addressId}
+        order by gmt_modified desc
         limit #{pageNum} , #{pageSize}
     </select>
 
     <select id="pieChart" resultType="java.util.Map">
         select count(type) as value, type from devices where address_id = #{addressId}
         group by type
+    </select>
+
+    <select id="selectById" resultType="com.hua.furnitureManagement.pojo.entry.DeviceDO">
+        select * from devices where id = #{id}
+    </select>
+
+    <select id="isUsingDeviceStrategy" resultType="java.lang.Integer">
+        select count(id) from devices where devices_strategy_id = #{deviceStrategyId}
+    </select>
+
+    <select id="deviceStartList" resultType="com.hua.furnitureManagement.pojo.entry.DeviceDO">
+        select id, address_id, power from devices where status = 1
     </select>
 
 </mapper>

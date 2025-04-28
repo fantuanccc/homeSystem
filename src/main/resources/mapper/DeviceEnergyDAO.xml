@@ -7,6 +7,20 @@
             from devices_energy_consumption_record
             where address_id = #{addressId}
             group by ds
+        order by ds
+    </select>
+
+    <select id="deviceEnergyData" resultType="com.hua.furnitureManagement.pojo.entry.DeviceEnergyDO">
+        select *
+            from devices_energy_consumption_record
+            where devices_id = #{deviceId}
+            order by ds
+    </select>
+
+    <select id="queryByDeviceIdAndDs" resultType="com.hua.furnitureManagement.pojo.entry.DeviceEnergyDO">
+        select *
+            from devices_energy_consumption_record
+            where devices_id = #{deviceId} and ds = #{ds}
     </select>
 
 </mapper>

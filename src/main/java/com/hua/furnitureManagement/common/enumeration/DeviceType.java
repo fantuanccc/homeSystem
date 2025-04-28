@@ -1,7 +1,6 @@
 package com.hua.furnitureManagement.common.enumeration;
 
-
-public enum DeviceTypeEnum {
+public enum DeviceType {
     TEVELEVISION(0, "电视"),
     AIRCONDITIONER(1, "空调"),
     Frigde(2, "冰箱"),
@@ -11,7 +10,7 @@ public enum DeviceTypeEnum {
     private Integer code;
     private String name;
 
-    DeviceTypeEnum(Integer code, String name) {
+    DeviceType(Integer code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -24,12 +23,12 @@ public enum DeviceTypeEnum {
         return name;
     }
 
-    public static DeviceTypeEnum getEnumByCode(Integer code) {
-        for (DeviceTypeEnum deviceType : DeviceTypeEnum.values()) {
+    public static DeviceType getEnumByCode(Integer code) {
+        for (DeviceType deviceType : DeviceType.values()) {
             if (deviceType.getCode().equals(code)) {
                 return deviceType;
             }
         }
         return null;
-        }
+    }
 }

@@ -6,8 +6,8 @@ import lombok.Data;
 public class UserVO {
     private Long id;
     private String username;
-    private String role;
-    private Integer isAdmin;
+    private Integer isOwner; // 0: 普通用户, 1: 户主
     private Long addressId;
     private String phoneNumber;
+    private String token;
 }

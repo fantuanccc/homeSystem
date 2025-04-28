@@ -13,8 +13,8 @@ public class DeviceDTO {
     private Integer type; //（0为电视、1为空调、2为冰箱、3洗衣机、4为灯）
     private Integer status; //状态（0关闭，1开启）
     private String location; //设备位置
-    private Integer addressId; //设备所属地址id
-    private Double energyConsumption; //设备耗电量
+    private Long addressId; //设备所属地址id
+    private Double power; //设备功率（单位：瓦特）
     private Long devicesStrategyId; //设备策略id
     private String mode; //设备模式
     private Integer brightness; //亮度（灯,电视机,0低，1正常，2高）

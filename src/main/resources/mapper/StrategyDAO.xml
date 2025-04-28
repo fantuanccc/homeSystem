@@ -2,4 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hua.furnitureManagement.dao.StrategyDAO">
 
+    <select id="strategyList" resultType="com.hua.furnitureManagement.dao.StrategyDAO">
+        select * from strategy where 1 = 1
+        <if test="type != null and type!= ''">
+            and type = #{type}
+        </if>
+        <if test="addressId != null and addressId!= ''">
+            and address_id = #{addressId}
+        </if>
+        order by create_time desc
+    </select>
+
+    <update id="updateStrategy" parameterType="com.hua.furnitureManagement.pojo.entry.StrategyDO">
+        update strategy set
+        <trim prefix="" suffixOverrides=",">
+                gmt_modified = now(),
+            <if test="name != null and name!= ''">
+                name = #{name},
+            </if>
+            <if test="message != null and message!= ''">
+                message = #{message},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStrategy">
+        delete from strategy where id = #{id}
+    </delete>
+
+    <insert id="addStrategy" useGeneratedKeys="true" keyProperty="id" parameterType="com.hua.furnitureManagement.pojo.entry.StrategyDO">
+        insert into strategy (gmt_create, gmt_modified, name, message, type, address_id)
+            values (now(), now(), #{name}, #{message}, #{type}, #{addressId})
+    </insert>
+
+    <select id="selectById" resultType="com.hua.furnitureManagement.pojo.entry.StrategyDO">
+        select * from devices_strategy
+                 where id = #{id}
+    </select>
+
+    <select id="getStrategyCount" resultType="java.lang.Integer">
+        select count(*) from strategy
+                        where address_id = #{addressId}
+    </select>
+
+    <select id="getStrategyInfoByAddressId" resultType="com.hua.furnitureManagement.pojo.entry.StrategyDO">
+        select id, gmt_create, gmt_modified, `name`
+            from strategy
+            where address_id = #{addressId}
+        order by gmt_modified desc
+            limit #{pageNum} , #{pageSize}
+    </select>
+
+    <select id="getStrategyInfoById" resultType="com.hua.furnitureManagement.pojo.entry.StrategyDO">
+        select * from strategy
+                 where id = #{id}
+    </select>
 </mapper>
