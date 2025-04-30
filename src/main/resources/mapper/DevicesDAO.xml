@@ -131,4 +131,8 @@
         select id, address_id, power from devices where status = 1
     </select>
 
+    <select id="allDeviceList" resultType="com.hua.furnitureManagement.pojo.entry.DeviceDO">
+        select id, address_id from devices
+    </select>
+
 </mapper>

@@ -35,4 +35,7 @@ public interface DevicesDAO {
 
     // 获取开启状态的设备列表
     List<DeviceDO> deviceStartList();
+
+    // 获取所有设备列表
+    List<DeviceDO> allDeviceList();
 }

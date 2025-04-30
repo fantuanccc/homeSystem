@@ -115,7 +115,6 @@ public class DeviceServiceImpl implements DeviceService {
             temp.remove("type");
             result.add(temp);
         }
-        log.info("获取用户设备数据（饼图）：{}", result);
         return result;
     }
 
@@ -135,6 +134,14 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public List<DeviceDO> deviceStartList() {
         List<DeviceDO> result = devicesDAO.deviceStartList();
+        log.info("开启状态设备列表：{}", result);
+        return result;
+    }
+
+    @Override
+    public List<DeviceDO> allDeviceList() {
+        List<DeviceDO> result = devicesDAO.allDeviceList();
+        log.info("所有设备列表：{}", result);
         return result;
     }
 }

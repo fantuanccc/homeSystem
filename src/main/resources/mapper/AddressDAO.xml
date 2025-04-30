@@ -2,16 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hua.furnitureManagement.dao.AddressDAO">
 
-    <select id="selectByPhone" resultType="java.lang.Boolean">
-        select exists(select 1 from address where phone_number = #{phoneNumber}
-                                            and id = #{addressId})
-    </select>
+    <update id="applyKey">
+        update address set key = #{key}, key_status = 1 where id = #{id}
+    </update>
+
+    <update id="updateKeyStatus">
+        update address set key_status = #{status} where id = #{id}
+    </update>
 
     <select id="getAddressInfo" resultType="com.hua.furnitureManagement.pojo.entry.AddressDO">
-        select * from address where id = #{addressId}
+        select * from address where id = #{addressId} order by gmt_create
     </select>
 
     <select id="isUsingStrategy" resultType="java.lang.Integer">
         select count(id) from address where strategy_id = #{strategyId}
+    </select>
+
+    <select id="getKey" resultType="com.hua.furnitureManagement.pojo.entry.AddressDO">
+        select id, key from address where name = #{name} and unit_number = #{unitNumber}
+    </select>
+
+    <select id="allAddressName" resultType="java.lang.String">
+        select distinct name from address
+    </select>
+
+    <select id="unitNumber" resultType="java.lang.String">
+        select unit_number from address where name = #{name}
     </select>
 </mapper>

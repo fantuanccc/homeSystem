@@ -11,4 +11,14 @@ public class AdminDO {
     private Date gmtModified;
     private String username;
     private String password;
+    private String phoneNumber;
+
+    @Override
+    public String toString() {
+        return "AdminDO{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 }

@@ -14,7 +14,7 @@ public class DeviceDetailVO {
     private Integer type; //（0为电视、1为空调、2为冰箱、3洗衣机、4为灯）
     private Integer status; //状态（0关闭，1开启）
     private String location; //设备位置
-    private Double power; //设备功率（单位：瓦特）
+    private Double power; //设备功率（单位：千瓦时）
     private Double energyConsumed; //设备耗电量
     private Long devicesStrategyId; //设备策略id
     private String devicesStrategyName; //设备策略名字

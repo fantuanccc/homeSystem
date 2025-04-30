@@ -6,7 +6,9 @@ import java.util.Date;
 
 public class DateUtils {
     // 定义一个默认的日期格式
-    private static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    private static final String DEFAULT_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+    private static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
 
     /**
      * 获取当前时间
@@ -31,7 +33,7 @@ public class DateUtils {
      * @return 返回格式化后的当前时间字符串
      */
     public static String getCurrentDateFormatted() {
-        return getCurrentDateFormatted(DEFAULT_DATE_PATTERN);
+        return getCurrentDateFormatted(DEFAULT_TIME_PATTERN);
     }
 
     /**
@@ -54,7 +56,7 @@ public class DateUtils {
      * @return 返回格式化后的日期字符串
      */
     public static String formatDate(Date date) {
-        return formatDate(date, DEFAULT_DATE_PATTERN);
+        return formatDate(date, DEFAULT_TIME_PATTERN);
     }
 
     /**
@@ -79,7 +81,7 @@ public class DateUtils {
      * @throws ParseException 如果解析失败，抛出此异常
      */
     public static Date parseDate(String dateString) throws ParseException {
-        return parseDate(dateString, DEFAULT_DATE_PATTERN);
+        return parseDate(dateString, DEFAULT_TIME_PATTERN);
     }
 
     /**

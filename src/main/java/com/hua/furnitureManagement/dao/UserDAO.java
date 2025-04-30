@@ -13,12 +13,15 @@ public interface UserDAO {
     //注册
     void register(UserDO userDO);
 
-    //根据用户ID查询地址
-    Long selectAddressByID(Long userId);
-
     //编辑用户信息
-    void edit(UserDO userDO);
+    int edit(UserDO userDO);
 
     //获取用户信息
     UserDO getUserInfo(Long userId);
+
+    //是否存在手机号
+    boolean isExistPhoneNumber(String phoneNumber);
+
+    //获取用户id根据手机号
+    Long getUserId(String phoneNumber);
 }

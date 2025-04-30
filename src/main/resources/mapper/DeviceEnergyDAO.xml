@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hua.furnitureManagement.dao.DeviceEnergyDAO">
+    <insert id="addDeviceEnergyRecord" useGeneratedKeys="true" keyColumn="id" parameterType="com.hua.furnitureManagement.pojo.entry.DeviceEnergyDO">
+        insert into devices_energy_consumption_record (gmt_create, gmt_modified, devices_id, ds, time, count, num, address_id)
+        values (now(), now(), #{devicesId}, #{ds}, #{time}, #{count}, #{num}, #{addressId})
+    </insert>
+
+    <update id="updateDeviceEnergyNum">
+        update devices_energy_consumption_record set num = #{num}
+            where devices_id = #{devicesId} and ds = #{ds}
+    </update>
 
     <select id="lineChart" resultType="java.util.Map">
         select ds as ds, sum(num) as value

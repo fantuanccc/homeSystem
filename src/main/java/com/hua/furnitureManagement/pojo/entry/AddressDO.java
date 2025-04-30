@@ -13,4 +13,6 @@ public class AddressDO {
     private String unitNumber; // 单元号
     private String phoneNumber; // 户主手机号
     private Long strategyId; // 策略ID
+    private String key; // 密钥
+    private Integer keyStatus; // 密钥状态
 }

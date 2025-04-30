@@ -11,8 +11,15 @@ public class UserDO {
     private Date gmtModified;
     private String username;
     private String password;
-    private Integer isOwner;
     private Integer isDeleted;
-    private Long addressId;
     private String phoneNumber;
+
+    @Override
+    public String toString() {
+        return "UserDO{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 }

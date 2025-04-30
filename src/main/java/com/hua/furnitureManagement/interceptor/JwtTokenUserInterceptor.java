@@ -49,7 +49,10 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
             Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);
             Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
             String role = claims.get(JwtClaimsConstant.ROLE).toString();
-            Long addressId = Long.valueOf(claims.get(JwtClaimsConstant.ADDRESS_ID).toString());
+            Long addressId = null;
+            if(claims.get(JwtClaimsConstant.ADDRESS_ID) != null){
+                addressId = Long.valueOf(claims.get(JwtClaimsConstant.ADDRESS_ID).toString());
+            }
             log.info("当前用户的id：{} 身份：{} 住址id：{}", userId, role, addressId);
             BaseContext.setCurrentId(userId);
             BaseContext.setCurrentRole(role);

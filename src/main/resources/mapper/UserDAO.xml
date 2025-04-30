@@ -3,8 +3,8 @@
 <mapper namespace="com.hua.furnitureManagement.dao.UserDAO">
 
     <insert id="register" useGeneratedKeys="true" keyProperty="id" parameterType="com.hua.furnitureManagement.pojo.entry.UserDO">
-        insert into user (gmt_create, gmt_modified, username, password, is_owner, is_deleted, address_id, phone_number)
-        values (now(), now(), #{username}, #{password}, #{isOwner}, 0, #{addressId}, #{phoneNumber})
+        insert into user (gmt_create, gmt_modified, username, password, is_deleted, phone_number)
+        values (now(), now(), #{username}, #{password}, 0, #{phoneNumber})
     </insert>
 
     <update id="edit">
@@ -17,12 +17,6 @@
             <if test="password!= null and password!= ''">
                 password = #{password},
             </if>
-            <if test="isOwner!= null">
-                is_owner = #{isOwner},
-            </if>
-            <if test="addressId!= null">
-                address_id = #{addressId},
-            </if>
             <if test="phoneNumber!= null and phoneNumber!= ''">
                 phone_number = #{phoneNumber},
             </if>
@@ -32,17 +26,21 @@
 
     <select id="login" resultType="com.hua.furnitureManagement.pojo.entry.UserDO">
             select * from user where is_deleted = 0
-            <if test="username!= null and username!= ''">
-                and username = #{username}
+            <if test="phoneNumber!= null and phoneNumber!= ''">
+                and phone_number = #{phoneNumber}
             </if>
     </select>
 
-    <select id="selectAddressByID" resultType="java.lang.Long">
-        select address_id from user where id = #{id}
+    <select id="isExistPhoneNumber" resultType="java.lang.Boolean">
+        select exists(select 1 from user where phone_number = #{phone_number})
     </select>
 
     <select id="getUserInfo" resultType="com.hua.furnitureManagement.pojo.entry.UserDO">
         select * from user where id = #{id}
+    </select>
+
+    <select id="getUserId" resultType="java.lang.Long">
+        select id from user where phone_number = #{phoneNumber}
     </select>
 
 </mapper>

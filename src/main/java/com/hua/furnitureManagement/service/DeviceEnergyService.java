@@ -19,5 +19,11 @@ public interface DeviceEnergyService {
     JSONArray queryDeviceEnergyValue(Long deviceId);
 
     // 根据设备id和日期查询对应设备能耗信息
-    DeviceEnergyDO queryByDeviceIdAndDs(Long deviceId, Date ds);
+    DeviceEnergyDO queryByDeviceIdAndDs(Long deviceId, String ds);
+
+    // 计算设备能耗定时任务
+    void calDeviceEnergyTask();
+
+    // 添加设备能耗记录定时任务
+    void addDeviceEnergyDayRecordTask();
 }

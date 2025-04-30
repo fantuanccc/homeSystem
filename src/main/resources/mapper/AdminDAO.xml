@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hua.furnitureManagement.dao.AdminDAO">
 
-
     <select id="login" resultType="com.hua.furnitureManagement.pojo.entry.AdminDO">
         SELECT * FROM admin WHERE username = #{username}
     </select>

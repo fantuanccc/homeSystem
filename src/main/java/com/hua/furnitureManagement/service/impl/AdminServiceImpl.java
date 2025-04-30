@@ -17,13 +17,13 @@ public class AdminServiceImpl implements AdminService {
     public AdminVO login(UserDTO userDTO) {
         AdminVO userVO = new AdminVO();
         AdminDO adminDO = new AdminDO();
-        adminDO.setUsername(userDTO.getUsername());
+        adminDO.setPhoneNumber(userDTO.getPhoneNumber());
         AdminDO admin = adminDAO.login(adminDO);
         if (admin == null) {
-            throw new RuntimeException("用户名或密码错误");
+            throw new RuntimeException("手机号或密码错误");
         }
         if (!admin.getPassword().equals(userDTO.getPassword())) {
-            throw new RuntimeException("用户名或密码错误");
+            throw new RuntimeException("手机号或密码错误");
         }
         BeanUtils.copyProperties(admin, userVO);
         return userVO;

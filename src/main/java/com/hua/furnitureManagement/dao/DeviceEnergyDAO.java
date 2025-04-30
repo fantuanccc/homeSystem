@@ -16,5 +16,11 @@ public interface DeviceEnergyDAO {
     List<DeviceEnergyDO> deviceEnergyData(Long deviceId);
 
     // 根据设备id和日期查询对应设备能耗信息
-    DeviceEnergyDO queryByDeviceIdAndDs(Long deviceId, Date ds);
+    DeviceEnergyDO queryByDeviceIdAndDs(Long deviceId, String ds);
+
+    // 添加设备能耗记录
+    Long addDeviceEnergyRecord(DeviceEnergyDO deviceEnergyDO);
+
+    // 更新
+    int updateDeviceEnergyNum(DeviceEnergyDO deviceEnergyDO);
 }
