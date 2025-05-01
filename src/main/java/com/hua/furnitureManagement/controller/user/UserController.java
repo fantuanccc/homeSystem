@@ -273,10 +273,10 @@ public class UserController {
             Map<String, Object> map = new HashMap<>(1);
             map.put("code", code);
             //发送验证码，参数中的模板CODE为阿里云模板管理中生成的模板CODE
-            Boolean isSend = sendSms.send(phone, "模板CODE", map);
-            //发送成功后将短信验证码存入redis中，设置有效期为50秒
+            Boolean isSend = sendSms.send(phone, map);
+            //发送成功后将短信验证码存入redis中，设置有效期为5分钟
             if (isSend) {
-                redisTemplate.opsForValue().set("login_" + phone, code, 60, TimeUnit.SECONDS);
+                redisTemplate.opsForValue().set("login_" + phone, code, 5, TimeUnit.MINUTES);
                 log.info("{} 验证码发送成功！验证码为：{}", phone, code);
                 return Result.success("验证码发送成功！");
             } else {
@@ -304,10 +304,10 @@ public class UserController {
             Map<String, Object> map = new HashMap<>(1);
             map.put("code", code);
             //发送验证码，参数中的模板CODE为阿里云模板管理中生成的模板CODE
-            Boolean isSend = sendSms.send(phone, "模板CODE", map);
-            //发送成功后将短信验证码存入redis中，设置有效期为50秒
+            Boolean isSend = sendSms.send(phone, map);
+            //发送成功后将短信验证码存入redis中，设置有效期为5分钟
             if (isSend) {
-                redisTemplate.opsForValue().set("register_" + phone, code, 60, TimeUnit.SECONDS);
+                redisTemplate.opsForValue().set("register_" + phone, code, 5, TimeUnit.MINUTES);
                 log.info("{} 验证码发送成功！验证码为：{}", phone, code);
                 return Result.success("验证码发送成功！");
             } else {
