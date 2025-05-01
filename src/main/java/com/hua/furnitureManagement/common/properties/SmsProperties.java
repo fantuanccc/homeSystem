@@ -10,5 +10,4 @@ import org.springframework.stereotype.Component;
 public class SmsProperties {
     private String accessKeyId;
     private String accessKeySecret;
-    private String signName;
 }

@@ -12,10 +12,9 @@ public interface SendSms {
     /**
      * 发送短信验证码
      * @param phoneNumber
-     * @param templateCode
      * @param map
      * @return
      */
-    Boolean send(String phoneNumber, String templateCode, Map<String, Object> map);
+    Boolean send(String phoneNumber, Map<String, Object> map);
 }
 
