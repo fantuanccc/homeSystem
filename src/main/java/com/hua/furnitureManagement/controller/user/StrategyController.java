@@ -64,7 +64,7 @@ public class StrategyController {
     }
 
     /**
-     * 删除自定义单设备策略
+     * 删除自定义设备策略
      */
     @GetMapping("/deleteDeviceStrategy")
     public Result<String> deleteDeviceStrategy(@RequestParam Long id) {

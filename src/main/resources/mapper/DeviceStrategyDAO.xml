@@ -4,29 +4,47 @@
 
     <insert id="addDeviceStrategy" useGeneratedKeys="true" keyProperty="id" parameterType="com.hua.furnitureManagement.pojo.entry.DeviceStrategyDO">
         insert into devices_strategy (gmt_create, gmt_modified, `name`, energy_consumption_level, devices_type, brightness, temperature,
-            mode, fan_speed, volume, water_level, color_temperature, remaining_time, addresss_id)
+            mode, fan_speed, volume, water_level, color_temperature, remaining_time, address_id)
         values (now(), now(), #{name}, #{energyConsumptionLevel}, #{devicesType}, #{brightness}, #{temperature}, #{mode},
                 #{fanSpeed}, #{volume}, #{waterLevel}, #{colorTemperature}, #{remainingTime}, #{addressId})
     </insert>
 
-    <update id="updateDeviceStrategy">
+    <update id="updateDeviceStrategy" parameterType="com.hua.furnitureManagement.pojo.entry.DeviceStrategyDO">
         update devices_strategy
         <set>
             gmt_modified = now(),
-            <if test="username!= null and username!= ''">
-                username = #{username},
+            <if test="name!= null and name!= ''">
+                `name` = #{name},
             </if>
-            <if test="password!= null and password!= ''">
-                password = #{password},
+            <if test="mode != null and mode != ''">
+                `mode` = #{mode},
             </if>
-            <if test="isOwner!= null">
-                is_owner = #{isOwner},
+            <if test="brightness != null">
+                `brightness` = #{brightness},
             </if>
-            <if test="addressId!= null">
-                address_id = #{addressId},
+            <if test="temperature != null">
+                `temperature` = #{temperature},
             </if>
-            <if test="phoneNumber!= null and phoneNumber!= ''">
-                phone_number = #{phoneNumber},
+            <if test="fanSpeed != null">
+                `fan_speed` = #{fanSpeed},
+            </if>
+            <if test="volume != null">
+                `volume` = #{volume},
+            </if>
+            <if test="waterLevel != null">
+                `water_level` = #{waterLevel},
+            </if>
+            <if test="colorTemperature != null">
+                `color_temperature` = #{colorTemperature},
+            </if>
+            <if test="remainingTime != null">
+                `remaining_time` = #{remainingTime},
+            </if>
+            <if test="color != null">
+                `color` = #{color},
+            </if>
+            <if test="energyConsumptionLevel != null">
+                `energy_consumption_level` = #{energyConsumptionLevel},
             </if>
         </set>
             where id = #{id}
@@ -44,7 +62,7 @@
         select id, gmt_create, gmt_modified, `name`, devices_type
             from devices_strategy
             where address_id = #{addressId}
-            order by gmt_modified desc
+            order by devices_type, gmt_modified desc
             limit #{pageNum} , #{pageSize}
     </select>
 
@@ -56,10 +74,6 @@
     <select id="getDeviceStrategyInfoById" resultType="com.hua.furnitureManagement.pojo.entry.DeviceStrategyDO">
         select * from devices_strategy
                  where id = #{id}
-    </select>
-
-    <select id="queryStrategyById" resultType="com.hua.furnitureManagement.pojo.entry.DeviceStrategyDO">
-        select *
     </select>
 
 </mapper>

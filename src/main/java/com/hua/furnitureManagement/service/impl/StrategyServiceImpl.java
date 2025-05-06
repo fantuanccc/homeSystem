@@ -86,7 +86,6 @@ public class StrategyServiceImpl implements StrategyService {
         // TODO 删除前考虑是否条件支持删除
         // 获取用户角色，判断是否可以进行管理操作
         if ("家庭成员".equals(BaseContext.getCurrentRole())){
-            //仅有户主有管理功能
             throw new GlobalException("用户暂无该权限");
         }
 
@@ -108,12 +107,6 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public void addOrUpdateDeviceStrategy(DeviceStrategyDTO request) {
-        // 获取用户角色，判断是否可以进行管理操作
-        if ("家庭成员".equals(BaseContext.getCurrentRole())){
-            //仅有户主有管理功能
-            throw new GlobalException("用户暂无该权限");
-        }
-
         DeviceStrategyDO deviceStrategyDO = new DeviceStrategyDO();
         //根据是否存在设备id判断是新增还是更新操作
         if(request.getId() == null){
@@ -185,7 +178,6 @@ public class StrategyServiceImpl implements StrategyService {
         // TODO 删除前考虑是否条件支持删除
         // 获取用户角色，判断是否可以进行管理操作
         if ("家庭成员".equals(BaseContext.getCurrentRole())){
-            //仅有户主有管理功能
             throw new GlobalException("用户暂无该权限");
         }
 
@@ -205,12 +197,6 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public void addOrUpdateStrategy(StrategyDTO request) {
-        // 获取用户角色，判断是否可以进行管理操作
-        if ("家庭成员".equals(BaseContext.getCurrentRole())){
-            //仅有户主有管理功能
-            throw new GlobalException("用户暂无该权限");
-        }
-
         StrategyDO strategyDO = new StrategyDO();
         //根据是否存在设备id判断是新增还是更新操作
         if(request.getId() == null){

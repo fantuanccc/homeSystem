@@ -85,6 +85,10 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public void delete(Long deviceId) {
+        // 获取用户角色，判断是否可以进行管理操作
+        if ("家庭成员".equals(BaseContext.getCurrentRole())){
+            throw new GlobalException("用户暂无该权限");
+        }
         //判断设备是否处于关闭状态
         if(devicesDAO.selectById(deviceId).getStatus() == 1){
             throw new GlobalException("请先关闭设备后，再进行删除。");
