@@ -45,14 +45,11 @@
     </insert>
 
     <update id="update" parameterType="com.hua.furnitureManagement.pojo.entry.DeviceDO">
-        UPDATE `devices`
+        update `devices`
         <set>
             `gmt_modified` = now(),
             <if test="name != null and name != ''">
                 `name` = #{name},
-            </if>
-            <if test="type != null">
-                `type` = #{type},
             </if>
             <if test="status != null">
                 `status` = #{status},
@@ -60,14 +57,19 @@
             <if test="location != null and location != ''">
                 `location` = #{location},
             </if>
-            <if test="addressId != null">
-                `address_id` = #{addressId},
-            </if>
-            <if test="power != null and power != ''">
-                `power` = #{power},
-            </if>
+        </set>
+        where `id` = #{id}
+    </update>
+
+    <update id="updateMode">
+        update `devices`
+        <set>
+            `gmt_modified` = now(),
             <if test="devicesStrategyId != null">
                 `devices_strategy_id` = #{devicesStrategyId},
+            </if>
+            <if test="devicesStrategyId == -1">
+                `devices_strategy_id` = null,
             </if>
             <if test="mode != null and mode != ''">
                 `mode` = #{mode},
@@ -97,7 +99,7 @@
                 `color` = #{color},
             </if>
         </set>
-        WHERE `id` = #{id}
+        where `id` = #{id}
     </update>
 
     <delete id="delete">
@@ -109,8 +111,10 @@
     </select>
 
     <select id="listByAddressId" resultType="com.hua.furnitureManagement.pojo.entry.DeviceDO">
-        select * from devices where address_id = #{addressId}
-        order by gmt_modified desc
+        select devices.*, devices_strategy.name as devicesStrategyName from devices
+            left join devices_strategy on devices.devices_strategy_id = devices_strategy.id
+        where devices.address_id = #{addressId}
+        order by status desc , gmt_modified desc
         limit #{pageNum} , #{pageSize}
     </select>
 

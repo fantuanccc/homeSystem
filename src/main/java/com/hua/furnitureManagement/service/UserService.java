@@ -31,23 +31,24 @@ public interface UserService {
     void edit(UserDTO user);
 
     /**
-     * 根据id和住址获取用户所有信息
+     * 获取用户所有信息
      * @param userId
-     * @param addressId
      * @return
      */
-    UserDetailVO getUserInfo(Long userId, Long addressId);
+    UserDetailVO getUserInfo(Long userId);
 
     /**
      * 申请住址密钥 （添加/更新）
+     * @param addressId
      */
-    void applyKey();
+    String applyKey(Long addressId);
 
     /**
      * 启用禁用密钥
      * @param status
+     * @param addressId
      */
-    void updateKeyStatus(Integer status);
+    void updateKeyStatus(Integer status, Long addressId);
 
     /**
      * 添加用户住址信息
@@ -92,9 +93,16 @@ public interface UserService {
     boolean isExistPhoneNumber(String phoneNumber);
 
     /**
-     * 根据手机号获取用户id
+     * 手机号验证码登录
      * @param phoneNumber
      * @return
      */
-    Long getUserId(String phoneNumber);
+    UserVO codeLogin(String phoneNumber);
+
+    /**
+     * 获取密钥
+     * @param addressId
+     * @return
+     */
+    Map<String, Object> selectKey(Long addressId);
 }

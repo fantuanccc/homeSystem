@@ -37,6 +37,15 @@ public class DeviceDetailVO {
         this.location = deviceDO.getLocation();
         this.power = deviceDO.getPower();
         this.devicesStrategyId = deviceDO.getDevicesStrategyId();
+        this.mode = deviceDO.getMode();
+        this.brightness = deviceDO.getBrightness();
+        this.temperature = deviceDO.getTemperature();
+        this.fanSpeed = deviceDO.getFanSpeed();
+        this.volume = deviceDO.getVolume();
+        this.waterLevel = deviceDO.getWaterLevel();
+        this.remainingTime = deviceDO.getRemainingTime();
+        this.color = deviceDO.getColor();
+        this.colorTemperature = deviceDO.getColorTemperature();
     }
 
     // DO转VO (设备策略信息)
@@ -44,6 +53,7 @@ public class DeviceDetailVO {
         this.devicesStrategyName = deviceStrategyDO.getName();
         this.mode = deviceStrategyDO.getMode();
         this.brightness = deviceStrategyDO.getBrightness();
+        this.temperature = deviceStrategyDO.getTemperature();
         this.fanSpeed = deviceStrategyDO.getFanSpeed();
         this.volume = deviceStrategyDO.getVolume();
         this.waterLevel = deviceStrategyDO.getWaterLevel();

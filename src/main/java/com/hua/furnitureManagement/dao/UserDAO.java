@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserDAO {
 
     //登录
-    UserDO login(UserDO userDO);
+    UserDO login(String phoneNumber);
 
     //注册
     void register(UserDO userDO);
@@ -21,7 +21,4 @@ public interface UserDAO {
 
     //是否存在手机号
     boolean isExistPhoneNumber(String phoneNumber);
-
-    //获取用户id根据手机号
-    Long getUserId(String phoneNumber);
 }

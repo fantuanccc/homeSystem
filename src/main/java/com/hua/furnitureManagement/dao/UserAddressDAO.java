@@ -16,4 +16,7 @@ public interface UserAddressDAO {
 
     // 获取用户角色
     Integer getRole(Long userId, Long addressId);
+
+    // 根据用户id和地址id查询地址信息
+    boolean isExistLink(Long userId, Long addressId);
 }

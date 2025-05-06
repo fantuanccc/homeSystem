@@ -48,7 +48,7 @@ public interface StrategyService {
     void addOrUpdateSystemStrategy(StrategyDTO request);
 
     // 单设备策略列表，供用户选择
-    List<JSONObject> deviceStrategyList(Long strategyId);
+    List<JSONObject> deviceStrategyList(Integer deviceType);
 
     // 全局策略列表，供用户选择
     List<JSONObject> strategyList();

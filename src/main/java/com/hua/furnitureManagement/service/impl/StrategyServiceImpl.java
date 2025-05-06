@@ -23,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("strategyService")
@@ -39,6 +40,10 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public Page<JSONArray> deviceStrategyPage(Integer pageNum, Integer pageSize) {
+        if (BaseContext.getCurrentAddressId() == null) {
+            // 用户地址不存在
+            throw new GlobalException("用户暂未添加地址信息，请先完善地址信息！");
+        }
         Page<JSONArray> page = new Page<>();
         JSONArray result = new JSONArray();
         page.setPageNum(pageNum);
@@ -134,6 +139,10 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public Page<JSONArray> strategyPage(Integer pageNum, Integer pageSize) {
+        if (BaseContext.getCurrentAddressId() == null) {
+            // 用户地址不存在
+            throw new GlobalException("用户暂未添加地址信息，请先完善地址信息！");
+        }
         Page<JSONArray> page = new Page<>();
         JSONArray result = new JSONArray();
         page.setPageNum(pageNum);
@@ -226,8 +235,28 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    public List<JSONObject> deviceStrategyList(Long strategyId) {
-        return null;
+    public List<JSONObject> deviceStrategyList(Integer deviceType) {
+        List<JSONObject> result = new ArrayList<>();
+        // 获取对应设备类型的设备策略 （自定义）
+        List<DeviceStrategyDO> list = strategyDAO.getDeviceStrategyListByDeviceType(deviceType, BaseContext.getCurrentAddressId());
+        list.forEach(deviceStrategyDO -> {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", deviceStrategyDO.getId());
+            jsonObject.put("name", deviceStrategyDO.getName());
+            jsonObject.put("strategyType", "用户自定义方案");
+            result.add(jsonObject);
+        });
+        // 获取对应设备类型的设备策略 （非定义）
+        List<DeviceStrategyDO> systemList = strategyDAO.getDeviceStrategyListByDeviceType(deviceType, -1L);
+        systemList.forEach(deviceStrategyDO -> {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", deviceStrategyDO.getId());
+            jsonObject.put("name", deviceStrategyDO.getName());
+            jsonObject.put("strategyType", "系统方案");
+            result.add(jsonObject);
+        });
+        log.info("设备策略列表：{}", result);
+        return result;
     }
 
     @Override

@@ -36,4 +36,10 @@ public interface DeviceService {
 
     // 获取所有设备
     List<DeviceDO> allDeviceList();
+
+    // 设置设备模式
+    void setDeviceMode(Long deviceId, Long strategyId);
+
+    // 更新设备参数
+    void updateDeviceParam(DeviceDTO request);
 }

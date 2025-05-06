@@ -1,5 +1,6 @@
 package com.hua.furnitureManagement.controller.user;
 
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hua.furnitureManagement.common.constant.JwtClaimsConstant;
@@ -50,23 +51,25 @@ public class UserController {
         try {
             // 判断用户登录是否成功
             UserVO login = userService.login(request);
-
-            // 获取所有地址信息，当用户存在多个房子，取最早添加的房子作为默认地址
-            List<Map<String, Object>> addressList = userService.userAllAddress(login.getId());
-            Long addressId = (Long) addressList.get(0).get("addressId");
-            Integer role = userService.getRole(login.getId(), addressId);
             // 生成jwt令牌
             Map<String, Object> claims = new HashMap<>();
+            // 获取所有地址信息，当用户存在多个房子，取最早添加的房子作为默认地址
+            List<Map<String, Object>> addressList = userService.userAllAddress(login.getId());
+            if (addressList.size() != 0) {
+                Long addressId = (Long) addressList.get(0).get("addressId");
+                Integer role = userService.getRole(login.getId(), addressId);
+                claims.put(JwtClaimsConstant.ROLE, role == 1 ? "户主" : "家庭成员");
+                claims.put(JwtClaimsConstant.ADDRESS_ID, addressId);
+            } else {
+                claims.put(JwtClaimsConstant.ADDRESS_ID, null);
+            }
             claims.put(JwtClaimsConstant.USER_ID, login.getId());
-            claims.put(JwtClaimsConstant.ROLE, role == 1 ? "户主" : "家庭成员");
-            claims.put(JwtClaimsConstant.ADDRESS_ID, addressId);
             String token = JwtUtil.createJWT(
                     jwtProperties.getUserSecretKey(),
                     jwtProperties.getUserTtl(),
                     claims);
-            login.setIsOwner(role);
             login.setToken(token);
-            log.info("{} 登录成功, token: {}", login.getId(), token);
+            log.info("{} 登录成功,用户信息: {} token: {}", login.getId(), login, token);
             return Result.success(login);
         } catch (Exception e) {
             log.error("登录失败, {}", e.getMessage(), e);
@@ -77,41 +80,42 @@ public class UserController {
     @PostMapping(value = "/codeLogin", name = "验证码登录")
     public Result<UserVO> codeLogin(@RequestBody UserDTO request) {
         try {
-            UserVO login = new UserVO();
             // 判断手机号号是否注册
-            if(!userService.isExistPhoneNumber(request.getPhoneNumber())){
+            if (!userService.isExistPhoneNumber(request.getPhoneNumber())) {
                 log.error("手机号码未注册!");
                 return Result.error("手机号码未注册！");
             }
             // 判断验证码是否正确
             String code = (String) redisTemplate.opsForValue().get("login_" + request.getPhoneNumber());
-            if(StrUtil.isBlank(code)){
+            if (StrUtil.isBlank(code)) {
                 log.error("验证码已过期!");
                 return Result.error("验证码已过期！");
             }
-            if(!code.equals(request.getCode())){
+            if (!code.equals(request.getCode())) {
                 log.error("验证码错误!");
                 return Result.error("验证码错误！");
             }
-            // 根据手机号获取用户id
-            Long userId = userService.getUserId(request.getPhoneNumber());
-            // 根据用户id获取住址信息   获取所有地址信息，当用户存在多个房子，取最早添加的房子作为默认地址
-            List<Map<String, Object>> addressList = userService.userAllAddress(userId);
-            Long addressId = (Long) addressList.get(0).get("addressId");
-            Integer role = userService.getRole(userId, addressId);
+            // 根据手机号获取用户信息
+            UserVO login = userService.codeLogin(request.getPhoneNumber());
             // 生成jwt令牌
             Map<String, Object> claims = new HashMap<>();
-            claims.put(JwtClaimsConstant.USER_ID, userId);
-            claims.put(JwtClaimsConstant.ROLE, role == 1 ? "户主" : "家庭成员");
-            claims.put(JwtClaimsConstant.ADDRESS_ID, addressId);
+            // 根据用户id获取住址信息   获取所有地址信息，当用户存在多个房子，取最早添加的房子作为默认地址
+            List<Map<String, Object>> addressList = userService.userAllAddress(login.getId());
+            if (addressList.size() != 0) {
+                Long addressId = (Long) addressList.get(0).get("addressId");
+                Integer role = userService.getRole(login.getId(), addressId);
+                claims.put(JwtClaimsConstant.ROLE, role == 1 ? "户主" : "家庭成员");
+                claims.put(JwtClaimsConstant.ADDRESS_ID, addressId);
+            } else {
+                claims.put(JwtClaimsConstant.ADDRESS_ID, null);
+            }
+            claims.put(JwtClaimsConstant.USER_ID, login.getId());
             String token = JwtUtil.createJWT(
                     jwtProperties.getUserSecretKey(),
                     jwtProperties.getUserTtl(),
                     claims);
-            login.setId(userId);
-            login.setIsOwner(role);
             login.setToken(token);
-            log.info("{} 登录成功, token: {}", userId, token);
+            log.info("{} 登录成功,用户信息: {} token: {}", login.getId(), login, token);
             return Result.success(login);
         } catch (Exception e) {
             log.error("登录失败, {}", e.getMessage(), e);
@@ -124,15 +128,16 @@ public class UserController {
         try {
             // 判断验证码是否正确
             String code = (String) redisTemplate.opsForValue().get("register_" + user.getPhoneNumber());
-            if(StrUtil.isBlank(code)){
+            if (StrUtil.isBlank(code)) {
                 log.error("验证码已过期!");
                 return Result.error("验证码已过期！");
             }
-            if(!code.equals(user.getCode())){
+            if (!code.equals(user.getCode())) {
                 log.error("验证码错误!");
                 return Result.error("验证码错误！");
             }
             userService.register(user);
+            log.info("手机号：{} 注册成功", user.getPhoneNumber());
             return Result.success("注册成功");
         } catch (Exception e) {
             log.error("注册失败, {}", e.getMessage(), e);
@@ -145,8 +150,7 @@ public class UserController {
         try {
             // 获取当前登录用户id和住址id
             Long userId = BaseContext.getCurrentId();
-            Long addressId = BaseContext.getCurrentAddressId();
-            return Result.success(userService.getUserInfo(userId, addressId));
+            return Result.success(userService.getUserInfo(userId));
         } catch (Exception e) {
             log.error("获取用户信息失败, {}", e.getMessage(), e);
             return Result.error(e.getMessage());
@@ -165,20 +169,29 @@ public class UserController {
     }
 
     @GetMapping(value = "/applyKey", name = "申请密钥")
-    public Result<String> applyKey() {
+    public Result<String> applyKey(@RequestParam Long addressId) {
         try {
-            userService.applyKey();
-            return Result.success("密钥申请成功");
+            return Result.success(userService.applyKey(addressId));
         } catch (Exception e) {
             log.error("密钥申请失败, {}", e.getMessage(), e);
             return Result.error(e.getMessage());
         }
     }
 
-    @GetMapping(value = "/updateKeyStatus", name = "启用禁用密钥")
-    public Result<String> updateKeyStatus(@RequestParam Integer status) {
+    @GetMapping(value = "/selectKey", name = "查看密钥")
+    public Result<Map<String, Object>> getKey(@RequestParam Long addressId) {
         try {
-            userService.updateKeyStatus(status);
+            return Result.success(userService.selectKey(addressId));
+        } catch (Exception e) {
+            log.error("查看密钥失败, {}", e.getMessage(), e);
+            return Result.error(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/updateKeyStatus", name = "启用禁用密钥")
+    public Result<String> updateKeyStatus(@RequestParam Integer status, @RequestParam Long addressId) {
+        try {
+            userService.updateKeyStatus(status, addressId);
             return Result.success("密钥状态修改成功");
         } catch (Exception e) {
             log.error("密钥状态修改失败, 原因：{}", e.getMessage(), e);
@@ -259,28 +272,28 @@ public class UserController {
     }
 
     @GetMapping(value = "/sendLoginCode", name = "发送登录验证码")
-    public Result<String> sendLoginCode(@RequestParam String phone) {
+    public Result<String> sendLoginCode(@RequestParam String phoneNumber) {
         try {
             //从redis中获取短信验证码
-            String code = (String) redisTemplate.opsForValue().get("login_" + phone);
+            String code = (String) redisTemplate.opsForValue().get("login_" + phoneNumber);
             //如果redis中有，则短信验证码已发送并且有效，直接返回验证码已发送
             if (StrUtil.isNotEmpty(code)) {
-                log.info("{} 验证码已发送！验证码为：{}", phone, code);
-                return Result.success("请勿重复发送验证码！");
+                log.info("{} 验证码已发送！验证码为：{}", phoneNumber, code);
+                return Result.success("验证码有效期为：5分钟，请勿重复发送验证码！");
             }
             //如果redis中没有查到验证码，直接生成6位数验证码，此code和短信模板中的变量${code}保持一致
             code = RandomUtil.randomNumbers(6);
             Map<String, Object> map = new HashMap<>(1);
             map.put("code", code);
             //发送验证码，参数中的模板CODE为阿里云模板管理中生成的模板CODE
-            Boolean isSend = sendSms.send(phone, map);
+            Boolean isSend = sendSms.send(phoneNumber, map);
             //发送成功后将短信验证码存入redis中，设置有效期为5分钟
             if (isSend) {
-                redisTemplate.opsForValue().set("login_" + phone, code, 5, TimeUnit.MINUTES);
-                log.info("{} 验证码发送成功！验证码为：{}", phone, code);
+                redisTemplate.opsForValue().set("login_" + phoneNumber, code, 5, TimeUnit.MINUTES);
+                log.info("{} 验证码发送成功！验证码为：{}", phoneNumber, code);
                 return Result.success("验证码发送成功！");
             } else {
-                log.error("{} 验证码发送失败！", phone);
+                log.error("{} 验证码发送失败！", phoneNumber);
                 return Result.error("验证码发送失败！");
             }
         } catch (Exception e) {
@@ -290,13 +303,13 @@ public class UserController {
     }
 
     @GetMapping(value = "/sendRegisterCode", name = "发送注册验证码")
-    public Result<String> sendRegisterCode(@RequestParam String phone) {
+    public Result<String> sendRegisterCode(@RequestParam String phoneNumber) {
         try {
             //从redis中获取短信验证码
-            String code = (String) redisTemplate.opsForValue().get("register_" + phone);
+            String code = (String) redisTemplate.opsForValue().get("register_" + phoneNumber);
             //如果redis中有，则短信验证码已发送并且有效，直接返回验证码已发送
             if (StrUtil.isNotEmpty(code)) {
-                log.info("{} 验证码已发送！验证码为：{}", phone, code);
+                log.info("{} 验证码已发送！验证码为：{}", phoneNumber, code);
                 return Result.success("请勿重复发送验证码！");
             }
             //如果redis中没有查到验证码，直接生成6位数验证码，此code和短信模板中的变量${code}保持一致
@@ -304,14 +317,14 @@ public class UserController {
             Map<String, Object> map = new HashMap<>(1);
             map.put("code", code);
             //发送验证码，参数中的模板CODE为阿里云模板管理中生成的模板CODE
-            Boolean isSend = sendSms.send(phone, map);
+            Boolean isSend = sendSms.send(phoneNumber, map);
             //发送成功后将短信验证码存入redis中，设置有效期为5分钟
             if (isSend) {
-                redisTemplate.opsForValue().set("register_" + phone, code, 5, TimeUnit.MINUTES);
-                log.info("{} 验证码发送成功！验证码为：{}", phone, code);
+                redisTemplate.opsForValue().set("register_" + phoneNumber, code, 5, TimeUnit.MINUTES);
+                log.info("{} 验证码发送成功！验证码为：{}", phoneNumber, code);
                 return Result.success("验证码发送成功！");
             } else {
-                log.error("{} 验证码发送失败！", phone);
+                log.error("{} 验证码发送失败！", phoneNumber);
                 return Result.error("验证码发送失败！");
             }
         } catch (Exception e) {

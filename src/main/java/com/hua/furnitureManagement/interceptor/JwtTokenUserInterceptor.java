@@ -48,14 +48,17 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);
             Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
-            String role = claims.get(JwtClaimsConstant.ROLE).toString();
+            String role = null;
+            if(claims.get(JwtClaimsConstant.ROLE) != null){
+                role = claims.get(JwtClaimsConstant.ROLE).toString();
+                BaseContext.setCurrentRole(role);
+            }
             Long addressId = null;
             if(claims.get(JwtClaimsConstant.ADDRESS_ID) != null){
                 addressId = Long.valueOf(claims.get(JwtClaimsConstant.ADDRESS_ID).toString());
             }
             log.info("当前用户的id：{} 身份：{} 住址id：{}", userId, role, addressId);
             BaseContext.setCurrentId(userId);
-            BaseContext.setCurrentRole(role);
             BaseContext.setCurrentAddressId(addressId);
             //3、通过，放行
             return true;

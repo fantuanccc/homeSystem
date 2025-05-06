@@ -26,4 +26,6 @@ public interface DeviceEnergyService {
 
     // 添加设备能耗记录定时任务
     void addDeviceEnergyDayRecordTask();
+
+
 }

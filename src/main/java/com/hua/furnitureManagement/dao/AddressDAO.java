@@ -4,6 +4,7 @@ import com.hua.furnitureManagement.pojo.entry.AddressDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface AddressDAO {
@@ -27,4 +28,10 @@ public interface AddressDAO {
 
     // 获取对应小区下面的单元号
     List<String> unitNumber(String name);
+
+    // 根据手机号获取地址id列表
+    List<Long> getAddressByPhoneNumber(String phoneNumber);
+
+    // 根据住址id获取密钥信息
+    Map<String, Object> getKeyById(Long id);
 }

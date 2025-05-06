@@ -3,7 +3,7 @@
 <mapper namespace="com.hua.furnitureManagement.dao.AddressDAO">
 
     <update id="applyKey">
-        update address set key = #{key}, key_status = 1 where id = #{id}
+        update address set `key` = #{key}, key_status = 1 where id = #{id}
     </update>
 
     <update id="updateKeyStatus">
@@ -19,7 +19,7 @@
     </select>
 
     <select id="getKey" resultType="com.hua.furnitureManagement.pojo.entry.AddressDO">
-        select id, key from address where name = #{name} and unit_number = #{unitNumber}
+        select id, `key` from address where `name` = #{name} and unit_number = #{unitNumber} and key_status = 1
     </select>
 
     <select id="allAddressName" resultType="java.lang.String">
@@ -28,5 +28,13 @@
 
     <select id="unitNumber" resultType="java.lang.String">
         select unit_number from address where name = #{name}
+    </select>
+
+    <select id="getAddressByPhoneNumber" resultType="java.lang.Long">
+        select id from address where phone_number = #{phoneNumber}
+    </select>
+
+    <select id="getKeyById" resultType="java.util.Map">
+         select `key`, key_status as `status` from address where id = #{id}
     </select>
 </mapper>

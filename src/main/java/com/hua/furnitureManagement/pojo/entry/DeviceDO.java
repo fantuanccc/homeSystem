@@ -16,6 +16,7 @@ public class DeviceDO {
     private Long addressId; //设备所属地址id
     private Double power; //设备功率（单位：千瓦时）
     private Long devicesStrategyId; //设备策略id
+    private String devicesStrategyName; //设备策略名字
     private String mode; //设备模式
     private Integer brightness; //亮度（灯,电视机,0低，1正常，2高）
     private Long temperature; //温度（空调、洗衣机、冰箱）
@@ -25,4 +26,27 @@ public class DeviceDO {
     private Integer colorTemperature; //色温（灯,0冷光，1正常，2暖光）
     private Long remainingTime; //洗涤剩余时间（洗衣机）
     private Integer color; //颜色（灯，0白光，1黄光，2白蓝光
+
+    @Override
+    public String toString() {
+        return "DeviceDO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", status=" + status +
+                ", location='" + location + '\'' +
+                ", addressId=" + addressId +
+                ", power=" + power +
+                ", devicesStrategyId=" + devicesStrategyId +
+                ", mode='" + mode + '\'' +
+                ", brightness=" + brightness +
+                ", temperature=" + temperature +
+                ", fanSpeed=" + fanSpeed +
+                ", volume=" + volume +
+                ", waterLevel=" + waterLevel +
+                ", colorTemperature=" + colorTemperature +
+                ", remainingTime=" + remainingTime +
+                ", color=" + color +
+                '}';
+    }
 }

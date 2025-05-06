@@ -38,4 +38,7 @@ public interface DevicesDAO {
 
     // 获取所有设备列表
     List<DeviceDO> allDeviceList();
+
+    // 更新设备模式
+    int updateMode(DeviceDO deviceDO);
 }

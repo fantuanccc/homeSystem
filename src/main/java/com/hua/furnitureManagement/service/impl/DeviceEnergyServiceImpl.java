@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hua.furnitureManagement.common.util.DateUtils;
 import com.hua.furnitureManagement.dao.DeviceEnergyDAO;
+import com.hua.furnitureManagement.dao.DeviceStrategyDAO;
 import com.hua.furnitureManagement.dao.UserDAO;
 import com.hua.furnitureManagement.pojo.entry.DeviceDO;
 import com.hua.furnitureManagement.pojo.entry.DeviceEnergyDO;
+import com.hua.furnitureManagement.pojo.entry.DeviceStrategyDO;
 import com.hua.furnitureManagement.service.DeviceEnergyService;
 import com.hua.furnitureManagement.service.DeviceService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +25,6 @@ import java.util.Map;
 public class DeviceEnergyServiceImpl implements DeviceEnergyService {
     @Autowired
     private DeviceEnergyDAO deviceEnergyDAO;
-    @Autowired
-    private UserDAO userDAO;
     @Autowired
     private DeviceService deviceService;
 

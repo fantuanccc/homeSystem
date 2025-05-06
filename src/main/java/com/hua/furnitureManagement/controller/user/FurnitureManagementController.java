@@ -111,4 +111,28 @@ public class FurnitureManagementController {
             return Result.error(e.getMessage());
         }
     }
+
+    //设置设备模式
+    @GetMapping("/deviceMode")
+    public Result<Void> deviceMode(@RequestParam Long deviceId, @RequestParam Long strategyId) {
+        try {
+            deviceService.setDeviceMode(deviceId, strategyId);
+            return Result.success();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return Result.error(e.getMessage());
+        }
+    }
+
+    //更新设备参数信息
+    @PostMapping("/updateDeviceParam")
+    public Result<Void> updateDeviceDetail(@RequestBody DeviceDTO request) {
+        try {
+            deviceService.updateDeviceParam(request);
+            return Result.success();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return Result.error(e.getMessage());
+        }
+    }
 }

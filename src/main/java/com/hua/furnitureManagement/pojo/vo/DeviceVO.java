@@ -18,6 +18,7 @@ public class DeviceVO {
     private Long addressId; //设备所属地址id
     private Double power; //设备功率（单位：千瓦时）
     private Long devicesStrategyId; //设备策略id
+    private String devicesStrategyName; //设备策略名字
     private String mode; //设备模式
     private Integer brightness; //亮度（灯,电视机,0低，1正常，2高）
     private Long temperature; //温度（空调、洗衣机、冰箱）
@@ -40,6 +41,7 @@ public class DeviceVO {
         this.addressId = deviceDO.getAddressId();
         this.power = deviceDO.getPower();
         this.devicesStrategyId = deviceDO.getDevicesStrategyId();
+        this.devicesStrategyName = deviceDO.getDevicesStrategyName();
         this.mode = deviceDO.getMode();
         this.brightness = deviceDO.getBrightness();
         this.fanSpeed = deviceDO.getFanSpeed();

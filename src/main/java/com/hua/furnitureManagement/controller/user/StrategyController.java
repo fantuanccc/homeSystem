@@ -207,9 +207,9 @@ public class StrategyController {
      * 单设备策略列表，供用户选择
      */
     @GetMapping("/deviceStrategyList")
-    public Result<List<JSONObject>> deviceStrategyList(@RequestParam Long strategyId){
+    public Result<List<JSONObject>> deviceStrategyList(@RequestParam Integer deviceType){
         try {
-            return Result.success(strategyService.deviceStrategyList(strategyId));
+            return Result.success(strategyService.deviceStrategyList(deviceType));
         } catch (Exception e) {
             log.error("deviceStrategyList报错，原因：{}", e.getMessage(), e);
             return Result.error(e.getMessage());

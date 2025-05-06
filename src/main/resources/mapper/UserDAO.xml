@@ -38,9 +38,4 @@
     <select id="getUserInfo" resultType="com.hua.furnitureManagement.pojo.entry.UserDO">
         select * from user where id = #{id}
     </select>
-
-    <select id="getUserId" resultType="java.lang.Long">
-        select id from user where phone_number = #{phoneNumber}
-    </select>
-
 </mapper>

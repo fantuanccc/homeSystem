@@ -58,4 +58,8 @@
                  where id = #{id}
     </select>
 
+    <select id="queryStrategyById" resultType="com.hua.furnitureManagement.pojo.entry.DeviceStrategyDO">
+        select *
+    </select>
+
 </mapper>

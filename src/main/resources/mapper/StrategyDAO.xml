@@ -58,4 +58,9 @@
         select * from strategy
                  where id = #{id}
     </select>
+
+    <select id="getDeviceStrategyListByDeviceType"
+            resultType="com.hua.furnitureManagement.pojo.entry.DeviceStrategyDO">
+        select id, name from devices_strategy where devices_type = #{deviceType} and address_id = #{addressId}
+    </select>
 </mapper>

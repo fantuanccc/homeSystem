@@ -23,5 +23,9 @@ public interface StrategyDAO {
     // 更新全局策略信息
     void updateStrategy(StrategyDO strategyDO);
 
+    // 删除全局策略信息
     void deleteStrategy(Long id);
+
+    // 根据设备类型获取设备策略信息
+    List<DeviceStrategyDO> getDeviceStrategyListByDeviceType(Integer deviceType, Long addressId);
 }

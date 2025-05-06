@@ -34,8 +34,6 @@ public class DeviceServiceImpl implements DeviceService {
     @Autowired
     private DevicesDAO devicesDAO;
     @Autowired
-    private UserDAO userDAO;
-    @Autowired
     private DeviceStrategyDAO deviceStrategyDAO;
 
     @Override
@@ -45,7 +43,7 @@ public class DeviceServiceImpl implements DeviceService {
         result.setPageSize(pageSize);
         if (addressId == null) {
             // 用户地址不存在
-            throw new RuntimeException("用户暂未添加地址信息，请先完善地址信息！");
+            throw new GlobalException("用户暂未添加地址信息，请先完善地址信息！");
         }
         //获取设备总量
         Integer count = devicesDAO.countByAddressId(addressId);
@@ -60,7 +58,6 @@ public class DeviceServiceImpl implements DeviceService {
             deviceVOList.add(deviceVO);
         });
         result.setData(deviceVOList);
-        log.info("获取用户设备列表：{}", result);
         return result;
     }
 
@@ -68,18 +65,16 @@ public class DeviceServiceImpl implements DeviceService {
     public void addOrUpdate(DeviceDTO request) {
         DeviceDO deviceDO = new DeviceDO();
         BeanUtils.copyProperties(request, deviceDO);
-        //获取住址id
-        Long addressId = BaseContext.getCurrentAddressId();
-        deviceDO.setAddressId(addressId);
         //根据传参判断是新增还是更新
         if (request.getId() == null) {
             //新增
-            log.info("新增设备信息：{}", deviceDO);
+            //获取住址id
+            Long addressId = BaseContext.getCurrentAddressId();
+            deviceDO.setAddressId(addressId);
             devicesDAO.insert(deviceDO);
             log.info("新增设备成功，设备信息：{}", deviceDO);
         } else {
             //更新
-            log.info("更新设备信息：{}", deviceDO);
             int n = devicesDAO.update(deviceDO);
             if (n == 0) {
                 throw new RuntimeException("更新失败");
@@ -95,7 +90,6 @@ public class DeviceServiceImpl implements DeviceService {
             throw new GlobalException("请先关闭设备后，再进行删除。");
         }
         // 删除设备信息
-        log.info("删除设备,设备id：{}", deviceId);
         int n = devicesDAO.delete(deviceId);
         if (n == 0) {
             log.error("删除设备失败，设备id：{}", deviceId);
@@ -125,8 +119,10 @@ public class DeviceServiceImpl implements DeviceService {
         DeviceDO deviceDO = devicesDAO.selectById(deviceId);
         deviceDetailVO.deviceTransformVO(deviceDO);
         // 获取设备的详细属性
-        DeviceStrategyDO deviceStrategyDO = deviceStrategyDAO.selectById(deviceDO.getDevicesStrategyId());
-        deviceDetailVO.deviceStrategyTransformVO(deviceStrategyDO);
+        if(deviceDO.getDevicesStrategyId() != null){
+            DeviceStrategyDO deviceStrategyDO = deviceStrategyDAO.selectById(deviceDO.getDevicesStrategyId());
+            deviceDetailVO.deviceStrategyTransformVO(deviceStrategyDO);
+        }
         log.info("获取设备详情信息：{}", deviceDetailVO);
         return deviceDetailVO;
     }
@@ -143,5 +139,36 @@ public class DeviceServiceImpl implements DeviceService {
         List<DeviceDO> result = devicesDAO.allDeviceList();
         log.info("所有设备列表：{}", result);
         return result;
+    }
+
+    @Override
+    public void setDeviceMode(Long deviceId, Long strategyId) {
+        // 根据策略id获取策略信息
+        DeviceStrategyDO deviceStrategyDO = deviceStrategyDAO.getDeviceStrategyInfoById(strategyId);
+
+        // 更新设备的详细信息
+        DeviceDO deviceDO = new DeviceDO();
+        BeanUtils.copyProperties(deviceStrategyDO, deviceDO);
+        deviceDO.setId(deviceId);
+        deviceDO.setDevicesStrategyId(strategyId);
+        int n = devicesDAO.updateMode(deviceDO);
+        if (n == 0) {
+            log.error("设定模式失败，设备id：{}", deviceId);
+            throw new RuntimeException("设定模式失败");
+        }
+        log.info("设定模式成功，设备id：{}", deviceId);
+    }
+
+    @Override
+    public void updateDeviceParam(DeviceDTO request) {
+        DeviceDO deviceDO = new DeviceDO();
+        BeanUtils.copyProperties(request, deviceDO);
+        deviceDO.setDevicesStrategyId(-1L);
+        int n = devicesDAO.updateMode(deviceDO);
+        if (n == 0) {
+            log.error("设备参数更新失败，设备id：{}", request.getId());
+            throw new RuntimeException("设备参数更新失败");
+        }
+        log.info("设备参数更新失败，设备id：{}", request.getId());
     }
 }

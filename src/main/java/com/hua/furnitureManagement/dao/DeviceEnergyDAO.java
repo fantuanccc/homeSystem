@@ -1,6 +1,7 @@
 package com.hua.furnitureManagement.dao;
 
 import com.hua.furnitureManagement.pojo.entry.DeviceEnergyDO;
+import com.hua.furnitureManagement.pojo.entry.DeviceStrategyDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Date;
